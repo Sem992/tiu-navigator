@@ -1,4 +1,9 @@
 import streamlit as st
+import time
+from urllib.parse import quote
+
+# Для интерактивной карты установите зависимости из requirements.txt:
+# folium, streamlit-folium, geopy
 
 # 1. Настройка страницы
 st.set_page_config(
@@ -486,6 +491,138 @@ QUESTIONS_DATA = [
     }
 ]
 
+
+# === КАРТА УЧЕБНЫХ КОРПУСОВ ТИУ ===
+CAMPUS_LOCATIONS = [
+    {"name": "Корпус №1", "address": "ул. Володарского, 38", "query": "улица Володарского, 38, Тюмень, Россия"},
+    {"name": "Корпус №1А", "address": "ул. Орджоникидзе, 54", "query": "улица Орджоникидзе, 54, Тюмень, Россия"},
+    {"name": "Корпус №2", "address": "ул. Мельникайте, 72", "query": "улица Мельникайте, 72, Тюмень, Россия"},
+    {"name": "Корпус №3", "address": "ул. 50 лет Октября, 38", "query": "улица 50 лет Октября, 38, Тюмень, Россия"},
+    {"name": "Корпус №4", "address": "ул. Володарского, 56", "query": "улица Володарского, 56, Тюмень, Россия"},
+    {"name": "Корпус №7", "address": "ул. Мельникайте, 70", "query": "улица Мельникайте, 70, Тюмень, Россия"},
+    {"name": "Корпуса №8/1, 8/2, 8/3, 8/4, 8/6", "address": "ул. Луначарского, 2", "query": "улица Луначарского, 2, Тюмень, Россия"},
+    {"name": "Корпус №9", "address": "ул. Луначарского, 4", "query": "улица Луначарского, 4, Тюмень, Россия"},
+    {"name": "Корпус №10", "address": "ул. Энергетиков, 44", "query": "улица Энергетиков, 44, Тюмень, Россия"},
+    {"name": "Корпус №11", "address": "ул. Энергетиков, 44, корп. 1", "query": "улица Энергетиков, 44 корпус 1, Тюмень, Россия"},
+    {"name": "Корпус №13", "address": "ул. Холодильная, 85", "query": "улица Холодильная, 85, Тюмень, Россия"},
+    {"name": "Корпус №14", "address": "ул. Холодильная, 85, стр. 1", "query": "улица Холодильная, 85 строение 1, Тюмень, Россия"},
+    {"name": "Корпус №16", "address": "ул. 50 лет Октября, 62", "query": "улица 50 лет Октября, 62, Тюмень, Россия"},
+    {"name": "Корпус №17", "address": "ул. Киевская, 78, корп. 1", "query": "улица Киевская, 78 корпус 1, Тюмень, Россия"},
+]
+
+
+@st.cache_data(ttl=86400, show_spinner=False)
+def geocode_campuses():
+    """Определяет координаты по адресам и кеширует результат на сутки."""
+    from geopy.geocoders import Nominatim
+    from geopy.extra.rate_limiter import RateLimiter
+
+    geolocator = Nominatim(user_agent="tiu_navigator_student_project")
+    geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1.1, swallow_exceptions=True)
+    results = []
+    for location in CAMPUS_LOCATIONS:
+        try:
+            point = geocode(location["query"], exactly_one=True, timeout=12)
+            if point:
+                results.append({
+                    **location,
+                    "lat": point.latitude,
+                    "lon": point.longitude,
+                })
+        except Exception:
+            # Не ломаем весь сайт, если геокодер временно недоступен.
+            continue
+    return results
+
+
+def render_campus_map():
+    st.subheader("🗺️ Карта корпусов ТИУ")
+    st.caption("Выберите маркер на карте или найдите корпус по номеру или адресу.")
+
+    search = st.text_input(
+        "🔎 Поиск корпуса",
+        placeholder="Например: корпус 7 или Мельникайте, 70",
+        key="campus_map_search",
+    )
+    locations = CAMPUS_LOCATIONS
+    if search.strip():
+        needle = search.casefold()
+        locations = [
+            item for item in CAMPUS_LOCATIONS
+            if needle in item["name"].casefold() or needle in item["address"].casefold()
+        ]
+
+    try:
+        import folium
+        from streamlit_folium import st_folium
+    except ImportError:
+        st.error(
+            "Для карты не установлены зависимости. Добавьте в requirements.txt: "
+            "`folium`, `streamlit-folium`, `geopy`."
+        )
+        st.code("pip install folium streamlit-folium geopy", language="bash")
+        return
+
+    with st.spinner("Загружаем координаты корпусов для карты..."):
+        geocoded = geocode_campuses()
+
+    if not geocoded:
+        st.warning(
+            "Не удалось загрузить координаты. Проверьте подключение к интернету "
+            "и попробуйте обновить страницу. Ниже доступны адреса корпусов."
+        )
+        shown_locations = locations
+    else:
+        shown_names = {item["name"] for item in locations}
+        shown_locations = [item for item in geocoded if item["name"] in shown_names]
+        campus_map = folium.Map(
+            location=[57.1522, 65.5272],
+            zoom_start=12,
+            tiles="OpenStreetMap",
+            control_scale=True,
+        )
+        for item in shown_locations:
+            popup_html = (
+                f"<b>{item['name']}</b><br>"
+                f"{item['address']}<br><br>"
+                f'<a href="https://www.openstreetmap.org/directions?to={item["lat"]}%2C{item["lon"]}" '
+                f'target="_blank">Построить маршрут</a>'
+            )
+            folium.Marker(
+                location=[item["lat"], item["lon"]],
+                tooltip=item["name"],
+                popup=folium.Popup(popup_html, max_width=280),
+                icon=folium.Icon(color="blue", icon="education", prefix="fa"),
+            ).add_to(campus_map)
+
+        if shown_locations:
+            st_folium(
+                campus_map,
+                use_container_width=True,
+                height=520,
+                returned_objects=[],
+                key="tiu_campus_map_widget",
+            )
+
+    st.markdown("### 📍 Список корпусов")
+    if not shown_locations:
+        st.info("По вашему запросу ничего не найдено.")
+    else:
+        for item in shown_locations:
+            with st.container(border=True):
+                col1, col2 = st.columns([3, 1])
+                with col1:
+                    st.markdown(f"**{item['name']}**")
+                    st.caption(item["address"])
+                with col2:
+                    map_query = quote(f"{item['address']}, Тюмень")
+                    st.link_button(
+                        "Маршрут ↗",
+                        f"https://yandex.ru/maps/?text={map_query}",
+                        use_container_width=True,
+                    )
+
+
 # 3. Кастомный CSS для тёмно-синего дизайна и крупных кнопок
 st.markdown("""
     <style>
@@ -612,6 +749,10 @@ if st.session_state.page == 'main':
         set_page('sos')
         st.rerun()
 
+    if st.button("🗺️ Карта корпусов ТИУ", use_container_width=True):
+        set_page('map')
+        st.rerun()
+
 # 6. Внутренние страницы с поиском и карточками
 else:
     # Конфигурация заголовков и подсказок для поиска
@@ -620,7 +761,8 @@ else:
         'study': ("📚 Раздел: Учёба", "🔍 Что вас интересует в учёбе?"),
         'dorm': ("🏠 Раздел: Общежития", "🔍 Поиск по вопросам общежития..."),
         'scholarship': ("💰 Раздел: Стипендии и поддержка", "🔍 Найти информацию о стипендии..."),
-        'sos': ("⚡ Что делать, если…", "🔍 Опишите вашу проблему...")
+        'sos': ("⚡ Что делать, если…", "🔍 Опишите вашу проблему..."),
+        'map': ("🗺️ Карта корпусов ТИУ", "🔍 Поиск корпуса...")
     }
 
     current_title, current_placeholder = page_configs.get(
@@ -687,34 +829,37 @@ else:
 
             st.markdown("</div>", unsafe_allow_html=True)
 
-    # Отображение списка вопросов с поиском
+    # Отображение карты либо списка вопросов с поиском
     else:
-        # Поисковая строка для текущего раздела
-        search_query = st.text_input("", placeholder=current_placeholder, key=f"search_{st.session_state.page}")
-
-        # Фильтрация вопросов по текущему разделу
-        category_questions = [q for q in QUESTIONS_DATA if q['category'] == st.session_state.page]
-
-        # Фильтрация по тексту поискового запроса
-        if search_query.strip():
-            query_words = search_query.lower().split()
-            filtered_questions = [
-                q for q in category_questions
-                if any(
-                    word in q['question'].lower() or word in q['answer'].lower()
-                    for word in query_words
-                )
-            ]
+        if st.session_state.page == 'map':
+            render_campus_map()
         else:
-            filtered_questions = category_questions
+            # Поисковая строка для текущего раздела
+            search_query = st.text_input("", placeholder=current_placeholder, key=f"search_{st.session_state.page}")
 
-        st.write("#### Популярные вопросы:")
+            # Фильтрация вопросов по текущему разделу
+            category_questions = [q for q in QUESTIONS_DATA if q['category'] == st.session_state.page]
 
-        if filtered_questions:
-            for q in filtered_questions:
-                # Отображение каждой карточки как кликабельной кнопки
-                if st.button(f"📌 {q['question']}", key=f"btn_{q['id']}", use_container_width=True):
-                    open_question(q['id'])
-                    st.rerun()
-        else:
-            st.info("Ничего не нашли. Попробуйте изменить запрос.")
+            # Фильтрация по тексту поискового запроса
+            if search_query.strip():
+                query_words = search_query.lower().split()
+                filtered_questions = [
+                    q for q in category_questions
+                    if any(
+                        word in q['question'].lower() or word in q['answer'].lower()
+                        for word in query_words
+                    )
+                ]
+            else:
+                filtered_questions = category_questions
+
+            st.write("#### Популярные вопросы:")
+
+            if filtered_questions:
+                for q in filtered_questions:
+                    # Отображение каждой карточки как кликабельной кнопки
+                    if st.button(f"📌 {q['question']}", key=f"btn_{q['id']}", use_container_width=True):
+                        open_question(q['id'])
+                        st.rerun()
+            else:
+                st.info("Ничего не нашли. Попробуйте изменить запрос.")
