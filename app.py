@@ -582,16 +582,16 @@ def render_campus_map():
             control_scale=True,
         )
         
-from branca.element import Element
+        from branca.element import Element
 
-campus_map.get_root().header.add_child(Element("""
-<style>
-.leaflet-control-attribution a[href*="leafletjs.com"],
-.leaflet-control-attribution img {
-    display: none !important;
-}
-</style>
-"""))
+        campus_map.get_root().header.add_child(Element("""
+        <style>
+        .leaflet-control-attribution a[href*="leafletjs.com"],
+        .leaflet-control-attribution img {
+            display: none !important;
+        }
+        </style>
+        """))
 
         for item in shown_locations:
             popup_html = (
