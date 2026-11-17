@@ -5,7 +5,7 @@ from urllib.parse import quote
 import html
 import time
 
-st.set_page_config(page_title="ТИУ НАВИГАТОР", page_icon="🎓", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="ТИУ Навигатор | Student Navigator", page_icon="🎓", layout="wide", initial_sidebar_state="expanded")
 
 QUESTIONS_DATA = [
   {
@@ -727,69 +727,62 @@ CAMPUS_LOCATIONS = [
   }
 ]
 
-# ---------------------------------------------------------------------------
-# База знаний: старые карточки (выше) + 200 новых из data/knowledge_base_new.json.
-# Обновить базу: python tools/import_excel.py <файл.xlsx>
-# ---------------------------------------------------------------------------
-import kb
-from data import foreign_students as FS
-
-BRAND = "ТИУ НАВИГАТОР"
-
-
-@st.cache_data(show_spinner=False)
-def load_questions():
-    return kb.merge_questions(QUESTIONS_DATA, kb.load_new_questions())
-
-
-ALL_QUESTIONS = load_questions()
-QUESTIONS_BY_ID = {x["id"]: x for x in ALL_QUESTIONS}
-PAGE_SIZE = 20
+# English-language content for the international student area. Confirm local procedures with the relevant TIU office.
+FOREIGN_FAQ = [
+("How do I check in to a TIU dormitory?", "Contact the TIU accommodation / campus office before arrival. Confirm your assigned dormitory, check-in date, room availability, payment terms and required documents. Bring your passport, migration documents, admission/enrolment confirmation and any documents requested by the university. Do not travel to check in without confirming the appointment and current requirements."),
+("Migration registration: what should I do?", "Foreign citizens staying in Russia must comply with migration registration rules. Immediately after arrival, contact the TIU office responsible for international students or migration support and provide your passport, migration card, visa (if applicable), arrival details and accommodation information. Deadlines and the responsible receiving party depend on your status and place of stay. Always follow the latest instructions from TIU and official migration authorities."),
+("How can I get my student ID?", "After your enrolment is confirmed, contact your institute's dean's office or the office responsible for student records. Ask whether your student ID is ready, where to collect it and whether a photo or additional documents are required. Bring your passport and enrolment details."),
+("Where can I find my class schedule?", "Sign in to the TIU student portal: https://my.tyuiu.ru/ . Open the schedule section and check it again before each study day because rooms and times may change."),
+("How do I find a TIU building?", "Use the Campus map section of this website. Search by building number or address, select a marker and open the route in Yandex Maps. If you only know a classroom number, confirm its building with your institute or the timetable first."),
+("Where can I get a certificate of enrolment?", "Sign in to the TIU student portal at https://my.tyuiu.ru/ and look for the certificate / document request service. If the required certificate is not available online, contact your institute's dean's office. Confirm the collection location and processing time."),
+("Who should I contact if I need help?", "Start with your institute's dean's office or the TIU office supporting international students. For an urgent safety or medical emergency in Russia, call 112. Do not rely on unofficial social media messages for legal or migration deadlines."),
+("Can international students join clubs and events?", "Many student clubs, sports activities, volunteer projects and events may be open to international students. Eligibility and language requirements vary. Check the event announcement and contact its organiser before registering."),
+]
 
 I18N = {
 "Русский": {
-"tagline":"Всё, что нужно студенту ТИУ — в одном месте.","home":"Главная","search":"Поиск","search_ph":"Введите вопрос, тему или ключевое слово...","sections":"Разделы","docs":"Документы","study":"Учёба","dorm":"Общежитие","scholarship":"Стипендии","sos":"Что делать, если…","clubs":"Студенческая жизнь","events":"Мероприятия и возможности","map":"Карта корпусов","international":"Иностранным студентам","all":"Все вопросы","popular":"Популярные вопросы","back":"← На главную","back_list":"← К списку вопросов","no_results":"Ничего не найдено. Попробуйте изменить запрос или выбрать другую тему.","answer":"Что делать","department":"Куда обращаться","address":"Адрес","office":"Кабинет","phone":"Телефон","email":"Электронная почта","documents":"Что подготовить","deadline":"Срок","source":"Официальный источник","checked":"Статус данных","map_title":"Карта корпусов ТИУ","map_hint":"Найдите корпус по номеру или адресу. Координаты адресов могут требовать ручной проверки.","map_search":"Поиск корпуса","route":"Маршрут ↗","campus_list":"Список корпусов","foreign_title":"Для иностранных студентов","foreign_sub":"Универсальный раздел на русском и английском языках.","faq":"Вопросы и ответы","all_search":"Поиск по всей базе","home_title":"Ваш университет. Понятнее.","home_desc":"Один понятный маршрут к нужной информации, сервисам и корпусам ТИУ.","open":"Открыть","language":"Язык / Language","disclaimer":"Информация носит справочный характер. Перед обращением проверяйте актуальные правила и сроки на официальных ресурсах ТИУ.","not_confirmed":"Требует проверки перед публикацией","foreign_note":"",
-"navigation":"Навигация и сервисы","eyebrow":"Тюменский индустриальный университет","you_are":"Вы здесь","topic":"Тема","all_topics":"Все темы","found":"Найдено","of":"из","show_more":"Показать ещё","unconfirmed_box":"Информация по этой карточке не подтверждена официально. Контакты, сроки и документы нужно уточнить в соответствующем подразделении ТИУ до обращения.","to_clarify":"Информация уточняется","same_topic":"Другие вопросы по теме","quick":"Быстрый доступ","kb_count":"вопросов в базе","show_all_results":"Показать все результаты","kb_ru_note":"","kb_hint":"Выберите вопрос, чтобы открыть подробный ответ."},
+"tagline":"Всё, что нужно студенту ТИУ — в одном месте.","home":"Главная","search":"Поиск","search_ph":"Введите вопрос, тему или ключевое слово...","sections":"Разделы","docs":"Документы","study":"Учёба","dorm":"Общежитие","scholarship":"Стипендии","sos":"Что делать, если…","clubs":"Студенческая жизнь","events":"Мероприятия и возможности","map":"Карта корпусов","international":"Иностранным студентам","all":"Все вопросы","popular":"Популярные вопросы","back":"← На главную","back_list":"← К списку","no_results":"Ничего не найдено. Попробуйте изменить запрос.","answer":"Что делать","department":"Куда обращаться","address":"Адрес","office":"Кабинет","phone":"Телефон","email":"Электронная почта","documents":"Что подготовить","deadline":"Срок","source":"Официальный источник","checked":"Статус данных","map_title":"Карта корпусов ТИУ","map_hint":"Найдите корпус по номеру или адресу. Координаты адресов могут требовать ручной проверки.","map_search":"Поиск корпуса","route":"Маршрут ↗","campus_list":"Список корпусов","foreign_title":"Для иностранных студентов","foreign_sub":"Краткие инструкции на английском языке по ключевым вопросам адаптации в ТИУ.","faq":"Вопросы и ответы","all_search":"Поиск по всей базе","home_title":"Ваш университет. Понятнее.","home_desc":"Один понятный маршрут к нужной информации, сервисам и корпусам ТИУ.","open":"Открыть раздел","language":"Язык интерфейса","disclaimer":"Информация носит справочный характер. Перед обращением проверяйте актуальные правила и сроки на официальных ресурсах ТИУ.","not_confirmed":"Требует проверки перед публикацией","foreign_note":"Migration and accommodation requirements can change. Confirm your individual case with TIU's international student support office and official authorities."},
 "English": {
-"tagline":"Everything TIU students need — in one place.","home":"Home","search":"Search","search_ph":"Enter a question, topic or keyword...","sections":"Explore sections","docs":"Documents","study":"Studies","dorm":"Accommodation","scholarship":"Scholarships","sos":"What should I do if…","clubs":"Student life","events":"Events & opportunities","map":"Campus map","international":"International students","all":"All questions","popular":"Popular questions","back":"← Home","back_list":"← Back to questions","no_results":"No results. Try a different search or topic.","answer":"What to do","department":"Contact","address":"Address","office":"Office","phone":"Phone","email":"Email","documents":"What to prepare","deadline":"Timeframe","source":"Official source","checked":"Data status","map_title":"TIU campus map","map_hint":"Search for a building by number or address. Geocoded locations may need manual verification.","map_search":"Find a building","route":"Directions ↗","campus_list":"Campus buildings","foreign_title":"For international students","foreign_sub":"One guide in Russian and English.","faq":"FAQ","all_search":"Search the full knowledge base","home_title":"Your university. Made clearer.","home_desc":"One clear route to TIU information, services and campus buildings.","open":"Open","language":"Language / Язык","disclaimer":"This is an informational student project. Check current rules and deadlines with official TIU sources before acting.","not_confirmed":"Needs verification before publication","foreign_note":"",
-"navigation":"Campus & services","eyebrow":"Tyumen Industrial University","you_are":"You are here","topic":"Topic","all_topics":"All topics","found":"Found","of":"of","show_more":"Show more","unconfirmed_box":"This card is not officially confirmed. Check contacts, deadlines and documents with the relevant TIU office before you act.","to_clarify":"To be confirmed","same_topic":"More questions on this topic","quick":"Quick access","kb_count":"questions in the knowledge base","show_all_results":"Show all results","kb_ru_note":"The knowledge base answers are written in Russian. You can search in English.","kb_hint":"Select a question to open the full answer."}
+"tagline":"Everything TIU students need — in one place.","home":"Home","search":"Search","search_ph":"Enter a question, topic or keyword...","sections":"Explore sections","docs":"Documents","study":"Studies","dorm":"Accommodation","scholarship":"Scholarships","sos":"What should I do if…","clubs":"Student life","events":"Events & opportunities","map":"Campus map","international":"International students","all":"All questions","popular":"Popular questions","back":"← Home","back_list":"← Back to questions","no_results":"No results. Try a different search.","answer":"What to do","department":"Contact","address":"Address","office":"Office","phone":"Phone","email":"Email","documents":"What to prepare","deadline":"Timeframe","source":"Official source","checked":"Data status","map_title":"TIU campus map","map_hint":"Search for a building by number or address. Geocoded locations may need manual verification.","map_search":"Find a building","route":"Directions ↗","campus_list":"Campus buildings","foreign_title":"For international students","foreign_sub":"Essential English-language guidance for settling in and studying at TIU.","faq":"FAQ","all_search":"Search the full knowledge base","home_title":"Your university. Made clearer.","home_desc":"One clear route to TIU information, services and campus buildings.","open":"Explore","language":"Interface language","disclaimer":"This is an informational student project. Check current rules and deadlines with official TIU sources before acting.","not_confirmed":"Needs verification before publication","foreign_note":"Migration and accommodation requirements can change. Confirm your individual case with TIU's international student support office and official authorities."}
 }
 
-lang = st.sidebar.selectbox("🌐 Language / Язык", ["Русский", "English"], key="lang_sel")
+lang = st.sidebar.selectbox("🌐 " + "Language / Язык", ["Русский", "English"], index=0)
 T = I18N[lang]
-LC = "en" if lang == "English" else "ru"
 if "page" not in st.session_state: st.session_state.page = "home"
 if "selected_id" not in st.session_state: st.session_state.selected_id = None
-if "return_page" not in st.session_state: st.session_state.return_page = None
-if "saved" not in st.session_state: st.session_state.saved = {}
-if "intl_topic" not in st.session_state: st.session_state.intl_topic = None
-
-CATEGORY_LABELS = {k: T[k] for k in ("docs","study","dorm","scholarship","sos","clubs","events","navigation")}
-
 
 def go(page):
     st.session_state.page = page
     st.session_state.selected_id = None
-    st.session_state.return_page = None
-    if page != "international": st.session_state.intl_topic = None
-
-
-def open_card(card_id, from_page=None):
-    st.session_state.selected_id = card_id
-    st.session_state.return_page = from_page
-
 
 def tr_category(cat):
-    return CATEGORY_LABELS.get(cat, T.get(cat, cat.title()))
+    return T.get(cat, cat.title())
 
 
-def esc(x):
-    return html.escape(str(x or ""))
-
-
-def safe_url(url):
-    return url if str(url).startswith(("http://", "https://")) else ""
-
+def has_display_value(value):
+    """Return False for empty or placeholder metadata so empty rows are not shown."""
+    if value is None:
+        return False
+    text = str(value).strip()
+    if not text:
+        return False
+    normalized = text.casefold().replace("ё", "е")
+    placeholders = (
+        "информация уточняется",
+        "требует уточнения",
+        "требует проверки",
+        "не подтверждено",
+        "не подтверждена",
+        "не подтверждены",
+        "не указано",
+        "не указана",
+        "нет данных",
+        "уточняется",
+        "указаны в ответе",
+        "—",
+        "-"
+    )
+    return not any(marker in normalized for marker in placeholders)
 
 @st.cache_data(ttl=86400, show_spinner=False)
 def geocode_campuses():
@@ -810,220 +803,86 @@ def geocode_campuses():
 
 st.markdown("""
 <style>
-:root{--bg:#081226;--panel:#111f3d;--panel2:#17294d;--line:#2a4168;--cyan:#31d7f5;--text:#f4f8ff;--muted:#b4c4dc;--warn:#ffcf6b;--ok:#6ee7a8}
+:root{--bg:#081226;--panel:#111f3d;--panel2:#17294d;--line:#263d66;--cyan:#31d7f5;--text:#f4f8ff;--muted:#a9bad5}
 .stApp{background:radial-gradient(circle at 12% 0%,#132b50 0%,#081226 42%,#071020 100%);color:var(--text)}
 [data-testid="stSidebar"]{background:#0b1730;border-right:1px solid #23385d}
-.block-container{max-width:1120px;padding-top:1.6rem;padding-bottom:3rem}
-.hero{padding:30px 32px;border:1px solid #28446e;border-radius:22px;background:linear-gradient(120deg,rgba(20,44,80,.96),rgba(12,28,55,.94));margin-bottom:22px}
-.hero h1{font-size:clamp(1.9rem,6.2vw,3.1rem);font-weight:800;letter-spacing:.02em;margin:0;color:#f7fbff;line-height:1.1;padding:0}
-.hero h1 span{color:var(--cyan)}
-.hero p{font-size:1.05rem;color:#c3d3ea;margin:.6rem 0 0;max-width:42rem}
-.eyebrow{color:var(--cyan);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.74rem;margin-bottom:10px}
-.topbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;color:var(--muted);font-size:.92rem;margin-bottom:10px}
-.topbar b{color:var(--cyan);letter-spacing:.06em}
-.topbar .sep{opacity:.5}
-.card{background:linear-gradient(145deg,#142747,#0f1d38);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin:8px 0 6px}
-.card b{font-size:1.08rem}
-.smallmuted{color:var(--muted);font-size:.92rem;margin-top:2px}
-.answer{background:#122342;border-left:4px solid var(--cyan);border-radius:12px;padding:16px 20px;margin:12px 0;line-height:1.65}
-.answer .step{display:flex;gap:12px;margin:9px 0}
-.answer .num{flex:0 0 28px;height:28px;border-radius:50%;background:#1b4772;color:#fff;font-weight:700;text-align:center;line-height:28px;font-size:.88rem}
-.answer p{margin:8px 0}.answer .h{font-weight:700;margin:14px 0 4px}
-.badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.78rem;font-weight:650;margin:2px 6px 2px 0;border:1px solid var(--line);color:var(--muted)}
-.badge.ok{color:var(--ok);border-color:#2d6b4d}.badge.warn{color:var(--warn);border-color:#7a6230}
-.box{border-radius:12px;padding:13px 16px;margin:12px 0;line-height:1.55;border:1px solid}
-.box.warn{background:#2a2412;border-color:#7a6230;color:#ffe9b3}
-.box.info{background:#10294a;border-color:#2d5a8e;color:#d6e6ff}
-.contact{display:grid;grid-template-columns:150px 1fr;gap:6px 14px;background:#0f1d38;border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin:12px 0}
-.contact dt{color:var(--muted);font-size:.9rem}.contact dd{margin:0;word-break:break-word}
-.contact dd.todo{color:var(--warn)}
-.contact a,.answer a{color:var(--cyan)}
-.sos{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0}
-.sos div{background:#0f1d38;border:1px solid var(--line);border-radius:12px;padding:8px 14px}
-.sos b{color:var(--cyan);font-size:1.25rem;margin-right:8px}
-div.stButton>button,div.stLinkButton>a{border-radius:12px!important;min-height:46px;font-weight:650!important;border:1px solid #31527e!important;background:linear-gradient(130deg,#172c50,#1b4772)!important;color:#f7fbff!important}
-div.stButton>button:hover,div.stLinkButton>a:hover{border-color:var(--cyan)!important}
-div.stButton>button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--cyan)!important;outline-offset:2px}
-button[kind="primary"],button[data-testid="stBaseButton-primary"]{border-color:var(--cyan)!important;background:linear-gradient(130deg,#12507a,#1b6a98)!important}
-[data-testid="stTextInput"] input{background:#0d1b35!important;border:1px solid #3a5684!important;border-radius:12px!important;color:#fff!important;min-height:46px}
+.block-container{max-width:1180px;padding-top:2rem;padding-bottom:3rem}
+.hero{padding:28px 30px;border:1px solid #28446e;border-radius:22px;background:linear-gradient(120deg,rgba(20,44,80,.96),rgba(12,28,55,.94));margin-bottom:24px}
+.hero h1{font-size:2.55rem;font-weight:800;letter-spacing:-.04em;margin:0;color:#f7fbff}
+.hero p{font-size:1.05rem;color:#b8cbe5;margin:.55rem 0 0}
+.eyebrow{color:#31d7f5;font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:.75rem;margin-bottom:9px}
+.card{background:linear-gradient(145deg,#142747,#0f1d38);border:1px solid #2a4168;border-radius:17px;padding:19px 20px;margin:8px 0}
+.smallmuted{color:#a9bad5;font-size:.9rem}
+.answer{background:#122342;border-left:4px solid #31d7f5;border-radius:12px;padding:18px 20px;margin:14px 0;line-height:1.65}
+div.stButton>button,div.stLinkButton>a{border-radius:12px!important;min-height:48px;font-weight:650!important;border:1px solid #31527e!important;background:linear-gradient(130deg,#172c50,#1b4772)!important;color:#f7fbff!important}
+div.stButton>button:hover{border-color:#31d7f5!important;transform:translateY(-1px);box-shadow:0 7px 22px #00c8ef22}
+[data-testid="stTextInput"] input{background:#0d1b35!important;border:1px solid #2b4167!important;border-radius:12px!important;color:#fff!important}
 [data-testid="stSelectbox"] div{border-radius:10px}
-[data-testid="stExpander"]{border:1px solid var(--line)!important;border-radius:14px!important;background:#0f1d38}
 hr{border-color:#263d66}
 footer{visibility:hidden}
-@media(max-width:700px){.block-container{padding:1rem .9rem 2.5rem}.hero{padding:22px 18px}.contact{grid-template-columns:1fr;gap:2px}.contact dd{margin-bottom:8px}}
+@media(max-width:700px){.hero h1{font-size:1.9rem}.block-container{padding:1rem}}
 </style>
 """, unsafe_allow_html=True)
 
 # Sidebar navigation
-st.sidebar.markdown(f"### 🎓 {BRAND}")
+st.sidebar.markdown("### 🎓 TIU NAVIGATOR")
 st.sidebar.caption(T["tagline"])
-nav_items=[("home","⌂ "+T["home"]),("docs","📄 "+T["docs"]),("study","📚 "+T["study"]),("dorm","🏠 "+T["dorm"]),("scholarship","💰 "+T["scholarship"]),("sos","⚡ "+T["sos"]),("clubs","🤝 "+T["clubs"]),("events","🚀 "+T["events"]),("navigation","🧭 "+T["navigation"]),("map","🗺️ "+T["map"]),("international","🌍 "+T["international"]),("all","🔎 "+T["all"])]
+nav_items=[("home","⌂ "+T["home"]),("docs","📄 "+T["docs"]),("study","📚 "+T["study"]),("dorm","🏠 "+T["dorm"]),("scholarship","💰 "+T["scholarship"]),("sos","⚡ "+T["sos"]),("clubs","🤝 "+T["clubs"]),("events","🚀 "+T["events"]),("map","🗺️ "+T["map"]),("international","🌍 "+T["international"]),("all","🔎 "+T["all"])]
 for key,label in nav_items:
-    if st.sidebar.button(label,key="nav_"+key,use_container_width=True,type="primary" if st.session_state.page==key else "secondary"): go(key); st.rerun()
+    if st.sidebar.button(label,key="nav_"+key,use_container_width=True): go(key); st.rerun()
 st.sidebar.markdown("---")
 st.sidebar.caption(T["disclaimer"])
 
-page = st.session_state.page
-PAGE_TITLES = {k: v.split(" ", 1)[1] if " " in v else v for k, v in nav_items}
+st.markdown(f'<div class="hero"><div class="eyebrow">TYUMEN INDUSTRIAL UNIVERSITY</div><h1>🎓 TIU Navigator</h1><p>{html.escape(T["tagline"])}</p></div>',unsafe_allow_html=True)
 
-
-def header(show_hero):
-    if show_hero:
-        st.markdown(f'<div class="hero"><div class="eyebrow">{esc(T["eyebrow"])}</div><h1>ТИУ <span>НАВИГАТОР</span></h1><p>{esc(T["tagline"])}</p></div>',unsafe_allow_html=True)
-        return
-    crumbs = [f'<b>{BRAND}</b>', esc(PAGE_TITLES.get(page, ""))]
-    sel = QUESTIONS_BY_ID.get(st.session_state.selected_id) if st.session_state.selected_id else None
-    if page == "international" and st.session_state.intl_topic:
-        crumbs.append(esc(next((t["title"][LC] for t in FS.TOPICS if t["id"] == st.session_state.intl_topic), "")))
-    if sel and page != "international":
-        crumbs.append(esc(sel["question"][:60] + ("…" if len(sel["question"]) > 60 else "")))
-    st.markdown('<div class="topbar">' + ' <span class="sep">›</span> '.join(crumbs) + '</div>', unsafe_allow_html=True)
-
-
-def persisted_text(label, key, placeholder):
-    value = st.text_input(label, value=st.session_state.saved.get(key, ""), placeholder=placeholder, key="ti_"+key)
-    st.session_state.saved[key] = value
-    return value
-
-
-def render_answer(answer):
-    parts = []
-    for block in kb.split_answer(answer):
-        if block[0] == "step":
-            parts.append(f'<div class="step"><div class="num">{esc(block[1])}</div><div>{esc(block[2])}</div></div>')
-        elif block[0] == "h":
-            parts.append(f'<div class="h">{esc(block[1])}</div>')
-        else:
-            parts.append(f'<p>{esc(block[1])}</p>')
-    return '<div class="answer"><b>📋 ' + esc(T["answer"]) + '</b>' + "".join(parts) + '</div>'
-
-
-def render_contact_block(item):
-    rows = []
-    def row(label, value, extra=""):
-        if kb.is_placeholder(value):
-            rows.append(f'<dt>{esc(label)}</dt><dd class="todo">{esc(T["to_clarify"])}</dd>')
-        else:
-            cls = ' class="todo"' if kb.is_unconfirmed(value) and extra == "check" else ""
-            rows.append(f'<dt>{esc(label)}</dt><dd{cls}>{value}</dd>')
-    row(T["department"], esc(item.get("department")))
-    row(T["address"], esc(item.get("address")))
-    row(T["office"], esc(item.get("office")))
-    phone = item.get("phone", "")
-    href = kb.phone_href(phone)
-    row(T["phone"], f'<a href="{href}">{esc(phone)}</a>' if href and not kb.is_placeholder(phone) else esc(phone))
-    email = item.get("email", "")
-    row(T["email"], f'<a href="mailto:{esc(email)}">{esc(email)}</a>' if "@" in email else esc(email))
-    row(T["documents"], esc(item.get("documents")), "check")
-    row(T["deadline"], esc(item.get("deadline")), "check")
-    return '<dl class="contact">' + "".join(rows) + '</dl>'
-
-
-def render_detail(item):
-    back_to = st.session_state.return_page
-    label = T["back_list"] if not back_to else ("← " + (PAGE_TITLES.get(back_to, T["back"])))
-    if st.button(label, key="back_detail"):
-        st.session_state.selected_id = None
-        if back_to:
-            st.session_state.page = back_to
-            st.session_state.return_page = None
-        st.rerun()
-    kind, status_text = kb.status_of(item)
-    topic = kb.topic_of(item)
-    st.markdown(f'<span class="badge">{esc(kb.topic_label(topic, lang, CATEGORY_LABELS))}</span><span class="badge {kind}">{"✓" if kind=="ok" else "⚠"} {esc(status_text)}</span>', unsafe_allow_html=True)
-    st.markdown("## " + item["question"])
-    st.markdown(render_answer(item["answer"]), unsafe_allow_html=True)
-    if kind == "warn" or any(kb.is_unconfirmed(item.get(k)) for k in ("deadline",)):
-        st.markdown(f'<div class="box warn">⚠ {esc(T["unconfirmed_box"])}</div>', unsafe_allow_html=True)
-    st.markdown(render_contact_block(item), unsafe_allow_html=True)
-    url = safe_url(item.get("officialSource"))
-    if url:
-        st.markdown(f"**{T['source']}:** [{url}]({url})")
-    related = [x for x in ALL_QUESTIONS if kb.topic_of(x) == topic and x["id"] != item["id"]][:3]
-    if related:
-        st.markdown(f"##### {T['same_topic']}")
-        for r in related:
-            if st.button("→ " + r["question"], key="rel_"+r["id"], use_container_width=True):
-                st.session_state.selected_id = r["id"]; st.rerun()
-
-
-def render_kb_list(items, key, title):
-    st.markdown("## " + title)
-    if lang == "English": st.caption(T["kb_ru_note"])
-    else: st.caption(T["kb_hint"])
-    query = persisted_text(T["search"], "q_"+key, T["search_ph"])
-    topics = []
-    for x in items:
-        t = kb.topic_of(x)
-        if t not in topics: topics.append(t)
-    options = [""] + topics
-    saved_topic = st.session_state.saved.get("t_"+key, "")
-    if saved_topic not in options: saved_topic = ""
-    topic = st.selectbox(T["topic"], options, index=options.index(saved_topic), key="tp_"+key,
-                         format_func=lambda t: T["all_topics"] if t == "" else kb.topic_label(t, lang, CATEGORY_LABELS))
-    st.session_state.saved["t_"+key] = topic
-    subset = kb.search(items, query)
-    if topic: subset = [x for x in subset if kb.topic_of(x) == topic]
-    limit_key = "lim_"+key+query+topic
-    limit = st.session_state.saved.get(limit_key, PAGE_SIZE)
-    st.caption(f"{T['found']}: {len(subset)}")
-    if not subset:
-        st.info(T["no_results"]); return
-    for item in subset[:limit]:
-        kind, status_text = kb.status_of(item)
-        with st.container(border=True):
-            st.markdown("**" + item["question"] + "**")
-            st.markdown(f'<span class="badge">{esc(kb.topic_label(kb.topic_of(item), lang, CATEGORY_LABELS))}</span><span class="badge {kind}">{"✓" if kind=="ok" else "⚠"} {esc(status_text)}</span>', unsafe_allow_html=True)
-            if st.button(T["open"]+" →", key=f"open_{key}_{item['id']}"):
-                open_card(item["id"]); st.rerun()
-    if len(subset) > limit:
-        if st.button(f"{T['show_more']} ({len(subset)-limit})", key="more_"+key, use_container_width=True):
-            st.session_state.saved[limit_key] = limit + PAGE_SIZE; st.rerun()
-
-
-# ---------------------------------------------------------------------------
-header(show_hero=(page == "home"))
-
-if page=="home":
+if st.session_state.page=="home":
     st.markdown(f"## {T['home_title']}")
     st.write(T["home_desc"])
-    q = persisted_text(T["search"], "home_q", T["search_ph"]).strip()
+    st.text_input(T["search"],placeholder=T["search_ph"],key="home_search")
+    q=st.session_state.get("home_search","").strip().casefold()
     if q:
-        hits = kb.search(ALL_QUESTIONS, q)
-        st.caption(f"{T['found']}: {len(hits)}")
-        for item in hits[:6]:
+        hits=[x for x in QUESTIONS_DATA if q in x['question'].casefold() or q in x['answer'].casefold()]
+        for item in hits[:20]:
             with st.container(border=True):
                 st.markdown("**"+item['question']+"**")
-                st.caption(kb.topic_label(kb.topic_of(item), lang, CATEGORY_LABELS))
-                if st.button(T['open']+" →",key="homehit_"+item['id']):
-                    st.session_state.page="all"; open_card(item['id'],"home"); st.rerun()
-        if len(hits) > 6 and st.button(T["show_all_results"]+" →", key="home_all"):
-            st.session_state.saved["q_all"] = q; go("all"); st.rerun()
-        if not hits: st.info(T["no_results"])
-    st.markdown(f"### {T['quick']}")
-    en = lang=="English"
-    quick=[("international","🌍",T['international'],"Admission, migration, dormitory, life in Tyumen — in Russian and English" if en else "Поступление, миграция, общежитие, жизнь в Тюмени — на русском и английском"),
-           ("all","🔎",T['all'],f"{len(ALL_QUESTIONS)} "+T["kb_count"]),
-           ("map","🗺️",T['map'],"Find TIU buildings and directions" if en else "Корпуса и маршруты"),
-           ("sos","⚡",T['sos'],"Step-by-step help for common situations" if en else "Пошаговые решения типовых ситуаций")]
-    cols=st.columns(2)
-    for i,(key,emoji,title,desc) in enumerate(quick):
-        with cols[i%2]:
-            st.markdown(f'<div class="card"><div style="font-size:1.6rem">{emoji}</div><b>{esc(title)}</b><div class="smallmuted">{esc(desc)}</div></div>',unsafe_allow_html=True)
-            if st.button(T['open']+" →",key="home_"+key,use_container_width=True): go(key); st.rerun()
+                st.caption(tr_category(item['category']))
+                if st.button(T['open'],key="homehit_"+item['id']): st.session_state.selected_id=item['id']; st.session_state.page="all"; st.rerun()
     st.markdown(f"### {T['sections']}")
-    small=[("docs","📄"),("study","📚"),("dorm","🏠"),("scholarship","💰"),("clubs","🤝"),("events","🚀"),("navigation","🧭")]
-    cols=st.columns(4)
-    for i,(key,emoji) in enumerate(small):
-        with cols[i%4]:
-            if st.button(f"{emoji} {T[key]}",key="home_s_"+key,use_container_width=True): go(key); st.rerun()
+    cards=[("docs","📄",T['docs'],"Documents, certificates and copies" if lang=="English" else "Справки, документы и копии"),("study","📚",T['study'],"Schedule, classrooms and study process" if lang=="English" else "Расписание, аудитории и учебный процесс"),("dorm","🏠",T['dorm'],"Check-in and accommodation" if lang=="English" else "Заселение и проживание"),("scholarship","💰",T['scholarship'],"Scholarships and financial support" if lang=="English" else "Стипендии и материальная поддержка"),("sos","⚡",T['sos'],"Step-by-step help for common situations" if lang=="English" else "Пошаговые решения типовых ситуаций"),("map","🗺️",T['map'],"Find TIU buildings and directions" if lang=="English" else "Корпуса и маршруты"),("clubs","🤝",T['clubs'],"Clubs, sports and volunteering" if lang=="English" else "Клубы, спорт и волонтёрство"),("international","🌍",T['international'],"Guidance for international students" if lang=="English" else "Инструкции для иностранных студентов")]
+    cols=st.columns(2)
+    for i,(key,emoji,title,desc) in enumerate(cards):
+        with cols[i%2]:
+            st.markdown(f'<div class="card"><div style="font-size:1.6rem">{emoji}</div><b style="font-size:1.12rem">{html.escape(title)}</b><div class="smallmuted">{html.escape(desc)}</div></div>',unsafe_allow_html=True)
+            if st.button(T['open']+" →",key="home_"+key,use_container_width=True): go(key); st.rerun()
 
-elif page=="map":
+elif st.session_state.page=="map":
     st.markdown(f"## {T['map_title']}")
     st.caption(T["map_hint"])
     search=st.text_input(T["map_search"],placeholder="Building 7 / Мельникайте, 70",key="campus_search")
     visible=[x for x in CAMPUS_LOCATIONS if not search.strip() or search.casefold() in x['name'].casefold() or search.casefold() in x['address'].casefold()]
     m=folium.Map(location=[57.1522,65.5272],zoom_start=12,tiles="OpenStreetMap",control_scale=True)
+    attribution_style = """
+    <style>
+      .leaflet-control-attribution {
+        font-size: 0 !important;
+        background: rgba(8, 18, 38, 0.72) !important;
+        color: #a9bad5 !important;
+        border-radius: 6px 0 0 0 !important;
+        padding: 2px 6px !important;
+      }
+      .leaflet-control-attribution a[href*="leaflet"] {
+        display: none !important;
+      }
+      .leaflet-control-attribution a[href*="openstreetmap"],
+      .leaflet-control-attribution a[href*="osm.org"] {
+        display: inline !important;
+        font-size: 10px !important;
+        color: #c4d2e6 !important;
+      }
+    </style>
+    """
+    from branca.element import Element
+    m.get_root().html.add_child(Element(attribution_style))
     try:
         with st.spinner("Resolving campus addresses…" if lang=="English" else "Определяем координаты корпусов…"):
             geocoded=geocode_campuses()
@@ -1046,85 +905,46 @@ elif page=="map":
         c2.link_button(T['route'],f"https://yandex.ru/maps/?text={quote(item['address']+', Тюмень')}",use_container_width=True)
     st.info("Geocoding places pins by address, not by surveyed building entrance. Verify exact positions before relying on the markers." if lang=="English" else "Геокодирование ставит метки по адресу, а не по проверенному входу в здание. Точные позиции корпусов нужно проверить вручную.")
 
-elif page=="international":
-    # Переключатель языка раздела синхронизирован с языком интерфейса
-    def _sync_lang():
-        st.session_state["lang_sel"] = st.session_state["intl_lang_radio"]
-    st.session_state["intl_lang_radio"] = lang
-    st.radio(FS.UI["language"][LC], ["Русский", "English"], key="intl_lang_radio", horizontal=True, on_change=_sync_lang)
-    ui = lambda k: FS.UI[k][LC]
-    topic_id = st.session_state.intl_topic
-    topic = next((t for t in FS.TOPICS if t["id"] == topic_id), None)
-    if topic is None:
-        st.markdown(f"## 🌍 {ui('title')}")
-        st.write(ui("subtitle"))
-        st.markdown(f'<div class="box warn">⚠ {esc(ui("global_note"))}</div>', unsafe_allow_html=True)
-        st.markdown(f"### {ui('topics')}")
-        cols = st.columns(2)
-        for i, t in enumerate(FS.TOPICS):
-            with cols[i % 2]:
-                st.markdown(f'<div class="card"><div style="font-size:1.6rem">{t["icon"]}</div><b>{esc(t["title"][LC])}</b><div class="smallmuted">{esc(t["summary"][LC])}</div></div>', unsafe_allow_html=True)
-                if st.button(ui("open") + " →", key="intl_open_" + t["id"], use_container_width=True):
-                    st.session_state.intl_topic = t["id"]; st.rerun()
-        st.markdown(f"### {ui('faq')}")
-        for q, a in FS.FAQ:
-            with st.expander(q[LC]): st.write(a[LC])
-        st.markdown(f"**{ui('links')}**")
-        for k in ("tiu", "portal", "educon"):
-            _, url, label = FS.LINKS[k]
-            st.markdown(f"- [{label[LC]}]({url})")
+elif st.session_state.page=="international":
+    st.markdown(f"## 🌍 {T['foreign_title']}")
+    st.write(T['foreign_sub'])
+    if lang!="English": st.info("Эта страница подготовлена на английском языке для иностранных студентов. Переключите язык интерфейса на English, чтобы читать инструкции.")
     else:
-        if st.button(ui("back_topics"), key="intl_back"):
-            st.session_state.intl_topic = None; st.rerun()
-        st.markdown(f"## {topic['icon']} {topic['title'][LC]}")
-        st.write(topic["summary"][LC])
-        if topic.get("warning"):
-            st.markdown(f'<div class="box warn"><b>⚠ {esc(ui("important"))}.</b> {esc(topic["warning"][LC])}</div>', unsafe_allow_html=True)
-        if topic.get("verify"):
-            st.markdown(f'<div class="box info"><b>ℹ {esc(ui("verify"))}.</b> {esc(topic["verify"][LC])}</div>', unsafe_allow_html=True)
-        if topic.get("show_emergency"):
-            st.markdown(f"**{ui('emergency_title')}**")
-            st.markdown('<div class="sos">' + "".join(f'<div><b>{n}</b>{esc(d[LC])}</div>' for n, d in FS.EMERGENCY) + '</div>', unsafe_allow_html=True)
-        for i, sec in enumerate(topic["sections"]):
-            with st.expander(sec["title"][LC], expanded=(i == 0)):
-                if sec.get("note"): st.caption(sec["note"][LC])
-                bullet = (lambda n, s: f"{n}. {s}") if sec["kind"] == "steps" else (lambda n, s: f"- {s}")
-                st.markdown("\n".join(bullet(n + 1, s) for n, s in enumerate(sec["items"][LC])))
-        if topic.get("show_contacts"):
-            for c in FS.CONTACTS:
-                body = (f'<dt>{"Адрес" if LC=="ru" else "Address"}</dt><dd>{esc(c["address"][LC])}</dd>'
-                        f'<dt>{"Телефон" if LC=="ru" else "Phone"}</dt><dd><a href="{kb.phone_href(c["phone"])}">{esc(c["phone"])}</a></dd>'
-                        f'<dt>Email</dt><dd><a href="mailto:{esc(c["email"])}">{esc(c["email"])}</a></dd>'
-                        f'<dt>{"Примечание" if LC=="ru" else "Note"}</dt><dd class="todo">{esc(c["note"][LC])}</dd>')
-                st.markdown(f'**{c["name"][LC]}**\n\n<dl class="contact">{body}</dl>', unsafe_allow_html=True)
-            st.markdown(f"**{ui('emergency_title')}**")
-            st.markdown('<div class="sos">' + "".join(f'<div><b>{n}</b>{esc(d[LC])}</div>' for n, d in FS.EMERGENCY) + '</div>', unsafe_allow_html=True)
-        if topic.get("link_page"):
-            if st.button(("🗺️ " + I18N[lang]["map"]) + " →", key="intl_map"): go("map"); st.rerun()
-        if topic.get("links"):
-            st.markdown(f"**{ui('links')}**")
-            for k in topic["links"]:
-                _, url, label = FS.LINKS[k]
-                st.markdown(f"- [{label[LC]}]({url})")
-        rel = topic.get("related", {})
-        rel_items = [QUESTIONS_BY_ID[i] for i in rel.get("ids", []) if i in QUESTIONS_BY_ID]
-        rel_items += [x for x in ALL_QUESTIONS if x["category"] in rel.get("categories", []) and x not in rel_items]
-        if rel_items:
-            st.markdown(f"### {ui('related')}")
-            st.caption(ui("related_note"))
-            for r in rel_items:
-                if st.button("→ " + r["question"], key="intl_rel_" + r["id"], use_container_width=True):
-                    st.session_state.page = "all"; open_card(r["id"], "international"); st.rerun()
-        st.markdown(f'<div class="box warn">⚠ {esc(ui("global_note"))}</div>', unsafe_allow_html=True)
+        for question,answer in FOREIGN_FAQ:
+            with st.expander(question): st.write(answer)
+        st.warning(T['foreign_note'])
+        st.markdown("**Useful links**")
+        st.markdown("- [TIU official website](https://tyuiu.ru/)\n- [TIU student portal](https://my.tyuiu.ru/)\n- [Educon](https://educon2.tyuiu.ru/)")
 
 else:
-    selected = QUESTIONS_BY_ID.get(st.session_state.selected_id) if st.session_state.selected_id else None
-    if selected:
-        render_detail(selected)
+    if st.session_state.selected_id:
+        selected=next((x for x in QUESTIONS_DATA if x['id']==st.session_state.selected_id),None)
+        if selected:
+            if st.button(T['back_list']): st.session_state.selected_id=None; st.rerun()
+            st.markdown("## "+selected['question'])
+            st.markdown(f'<div class="answer"><b>📋 {T["answer"]}</b><br>{html.escape(selected["answer"]).replace(chr(10),"<br>")}</div>',unsafe_allow_html=True)
+            fields=[("department",T['department']),("address",T['address']),("office",T['office']),("phone",T['phone']),("email",T['email']),("documents",T['documents']),("deadline",T['deadline'])]
+            for key,label in fields:
+                val=selected.get(key)
+                if has_display_value(val):
+                    st.markdown(f"**{label}:** {val}")
+            if has_display_value(selected.get('officialSource')):
+                st.markdown(f"**{T['source']}:** [{selected['officialSource']}]({selected['officialSource']})")
     else:
-        if st.button(T["back"], key="back_home"): go("home"); st.rerun()
-        items = ALL_QUESTIONS if page=="all" else [x for x in ALL_QUESTIONS if x['category']==page]
-        render_kb_list(items, page, T['all_search'] if page=="all" else tr_category(page))
+        st.markdown("## "+(T['all_search'] if st.session_state.page=="all" else tr_category(st.session_state.page)))
+        search=st.text_input(T['search'],placeholder=T['search_ph'],key="section_search_"+st.session_state.page)
+        category=st.session_state.page
+        subset=QUESTIONS_DATA if category=="all" else [x for x in QUESTIONS_DATA if x['category']==category]
+        if search.strip():
+            words=search.casefold().split()
+            subset=[x for x in subset if any(w in (x['question']+' '+x['answer']).casefold() for w in words)]
+        st.caption(f"{len(subset)}")
+        if subset:
+            for item in subset:
+                with st.container(border=True):
+                    st.markdown("**"+item['question']+"**")
+                    if st.button(T['open']+" →",key="open_"+item['id']): st.session_state.selected_id=item['id']; st.rerun()
+        else: st.info(T['no_results'])
 
 st.markdown("---")
 st.caption(T['disclaimer'])
