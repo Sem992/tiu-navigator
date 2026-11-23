@@ -407,7 +407,7 @@ QUESTIONS_DATA = [
     "documents": "",
     "deadline": "",
     "officialSource": "https://tyuiu.ru/",
-    "lastChecked": "Требует проверки перед публикацией"
+    "lastChecked": "25.09.2026"
   },
   {
     "id": "kb_78",
@@ -422,7 +422,7 @@ QUESTIONS_DATA = [
     "documents": "",
     "deadline": "",
     "officialSource": "https://tyuiu.ru/",
-    "lastChecked": "Требует проверки перед публикацией"
+    "lastChecked": "25.09.2026"
   },
   {
     "id": "kb_79",
@@ -437,7 +437,7 @@ QUESTIONS_DATA = [
     "documents": "",
     "deadline": "",
     "officialSource": "https://tyuiu.ru/",
-    "lastChecked": "Требует проверки перед публикацией"
+    "lastChecked": "25.09.2026"
   },
   {
     "id": "kb_91",
@@ -452,7 +452,7 @@ QUESTIONS_DATA = [
     "documents": "",
     "deadline": "",
     "officialSource": "https://tyuiu.ru/",
-    "lastChecked": "Требует проверки перед публикацией"
+    "lastChecked": "25.09.2026"
   },
   {
     "id": "kb_93",
@@ -467,7 +467,7 @@ QUESTIONS_DATA = [
     "documents": "",
     "deadline": "",
     "officialSource": "https://tyuiu.ru/",
-    "lastChecked": "Требует проверки перед публикацией"
+    "lastChecked": "25.09.2026"
   },
   {
     "id": "kb_94",
@@ -482,7 +482,7 @@ QUESTIONS_DATA = [
     "documents": "",
     "deadline": "",
     "officialSource": "https://tyuiu.ru/",
-    "lastChecked": "Требует проверки перед публикацией"
+    "lastChecked": "25.09.2026"
   },
   {
     "id": "kb_95",
@@ -497,7 +497,7 @@ QUESTIONS_DATA = [
     "documents": "",
     "deadline": "",
     "officialSource": "https://tyuiu.ru/",
-    "lastChecked": "Требует проверки перед публикацией"
+    "lastChecked": "25.09.2026"
   },
   {
     "id": "kb_96",
@@ -512,7 +512,7 @@ QUESTIONS_DATA = [
     "documents": "",
     "deadline": "",
     "officialSource": "https://tyuiu.ru/",
-    "lastChecked": "Требует проверки перед публикацией"
+    "lastChecked": "25.09.2026"
   },
   {
     "id": "kb_97",
@@ -527,7 +527,7 @@ QUESTIONS_DATA = [
     "documents": "",
     "deadline": "",
     "officialSource": "https://tyuiu.ru/",
-    "lastChecked": "Требует проверки перед публикацией"
+    "lastChecked": "25.09.2026"
   },
   {
     "id": "kb_98",
@@ -542,7 +542,7 @@ QUESTIONS_DATA = [
     "documents": "",
     "deadline": "",
     "officialSource": "https://tyuiu.ru/",
-    "lastChecked": "Требует проверки перед публикацией"
+    "lastChecked": "25.09.2026"
   },
   {
     "id": "kb_99",
@@ -557,7 +557,7 @@ QUESTIONS_DATA = [
     "documents": "",
     "deadline": "",
     "officialSource": "https://tyuiu.ru/",
-    "lastChecked": "Требует проверки перед публикацией"
+    "lastChecked": "25.09.2026"
   },
   {
     "id": "kb_100",
@@ -572,7 +572,7 @@ QUESTIONS_DATA = [
     "documents": "",
     "deadline": "",
     "officialSource": "https://tyuiu.ru/",
-    "lastChecked": "Требует проверки перед публикацией"
+    "lastChecked": "25.09.2026"
   }
 ]
 CAMPUS_LOCATIONS = [
@@ -669,11 +669,11 @@ PAGE_SIZE = 20
 
 I18N = {
 "Русский": {
-"tagline":"Всё, что нужно студенту ТИУ — в одном месте.","home":"Главная","search":"Поиск","search_ph":"Введите вопрос, тему или ключевое слово...","sections":"Разделы","docs":"Документы","study":"Учёба","dorm":"Общежитие","scholarship":"Стипендии","sos":"Что делать, если…","clubs":"Студенческая жизнь","events":"Мероприятия и возможности","map":"Карта корпусов","international":"Иностранным студентам","all":"Все вопросы","popular":"Популярные вопросы","back":"← На главную","back_list":"← К списку вопросов","no_results":"Ничего не найдено. Попробуйте изменить запрос или выбрать другую тему.","answer":"Что делать","department":"Куда обращаться","address":"Адрес","office":"Кабинет","phone":"Телефон","email":"Электронная почта","documents":"Что подготовить","deadline":"Срок","source":"Официальный источник","checked":"Статус данных","map_title":"Карта корпусов ТИУ","map_hint":"Найдите корпус по номеру или адресу. Координаты адресов могут требовать ручной проверки.","map_search":"Поиск корпуса","route":"Маршрут ↗","campus_list":"Список корпусов","foreign_title":"Для иностранных студентов","foreign_sub":"Универсальный раздел на русском и английском языках.","faq":"Вопросы и ответы","all_search":"Поиск по всей базе","home_title":"Ваш университет. Понятнее.","home_desc":"Один понятный маршрут к нужной информации, сервисам и корпусам ТИУ.","open":"Открыть","language":"Язык / Language","disclaimer":"Информация носит справочный характер. Перед обращением проверяйте актуальные правила и сроки на официальных ресурсах ТИУ.","not_confirmed":"Требует проверки перед публикацией","foreign_note":"",
-"navigation":"Навигация и сервисы","eyebrow":"Тюменский индустриальный университет","you_are":"Вы здесь","topic":"Тема","all_topics":"Все темы","found":"Найдено","of":"из","show_more":"Показать ещё","unconfirmed_box":"Информация по этой карточке не подтверждена официально. Контакты, сроки и документы нужно уточнить в соответствующем подразделении ТИУ до обращения.","to_clarify":"Информация уточняется","same_topic":"Другие вопросы по теме","quick":"Быстрый доступ","kb_count":"вопросов в базе","show_all_results":"Показать все результаты","kb_ru_note":"","kb_hint":"Выберите вопрос, чтобы открыть подробный ответ."},
+"tagline":"Всё, что нужно студенту ТИУ — в одном месте.","home":"Главная","search":"Поиск","search_ph":"Введите вопрос, тему или ключевое слово...","sections":"Разделы","docs":"Документы","study":"Учёба","dorm":"Общежитие","scholarship":"Стипендии","sos":"Что делать, если…","clubs":"Студенческая жизнь","events":"Мероприятия и возможности","map":"Карта корпусов","international":"Иностранным студентам","all":"Все вопросы","popular":"Популярные вопросы","back":"← На главную","back_list":"← К списку вопросов","no_results":"Ничего не найдено. Попробуйте изменить запрос или выбрать другую тему.","answer":"Что делать","department":"Куда обращаться","address":"Адрес","office":"Кабинет","phone":"Телефон","email":"Электронная почта","documents":"Что подготовить","deadline":"Срок","source":"Официальный источник","checked":"Статус данных","map_title":"Карта корпусов ТИУ","map_hint":"Найдите корпус по номеру или адресу. Координаты адресов могут требовать ручной проверки.","map_search":"Поиск корпуса","route":"Маршрут ↗","campus_list":"Список корпусов","foreign_title":"Для иностранных студентов","foreign_sub":"Универсальный раздел на русском и английском языках.","faq":"Вопросы и ответы","all_search":"Поиск по всей базе","home_title":"Ваш университет. Понятнее.","home_desc":"Один понятный маршрут к нужной информации, сервисам и корпусам ТИУ.","open":"Открыть","language":"Язык / Language","disclaimer":"Информация носит справочный характер. Перед обращением проверяйте актуальные правила и сроки на официальных ресурсах ТИУ.","not_confirmed":"","foreign_note":"",
+"navigation":"Навигация и сервисы","eyebrow":"Тюменский индустриальный университет","you_are":"Вы здесь","topic":"Тема","all_topics":"Все темы","found":"Найдено","of":"из","show_more":"Показать ещё","unconfirmed_box":"","to_clarify":"","same_topic":"Другие вопросы по теме","quick":"Быстрый доступ","kb_count":"вопросов в базе","show_all_results":"Показать все результаты","kb_ru_note":"","kb_hint":"Выберите вопрос, чтобы открыть подробный ответ."},
 "English": {
-"tagline":"Everything TIU students need — in one place.","home":"Home","search":"Search","search_ph":"Enter a question, topic or keyword...","sections":"Explore sections","docs":"Documents","study":"Studies","dorm":"Accommodation","scholarship":"Scholarships","sos":"What should I do if…","clubs":"Student life","events":"Events & opportunities","map":"Campus map","international":"International students","all":"All questions","popular":"Popular questions","back":"← Home","back_list":"← Back to questions","no_results":"No results. Try a different search or topic.","answer":"What to do","department":"Contact","address":"Address","office":"Office","phone":"Phone","email":"Email","documents":"What to prepare","deadline":"Timeframe","source":"Official source","checked":"Data status","map_title":"TIU campus map","map_hint":"Search for a building by number or address. Geocoded locations may need manual verification.","map_search":"Find a building","route":"Directions ↗","campus_list":"Campus buildings","foreign_title":"For international students","foreign_sub":"One guide in Russian and English.","faq":"FAQ","all_search":"Search the full knowledge base","home_title":"Your university. Made clearer.","home_desc":"One clear route to TIU information, services and campus buildings.","open":"Open","language":"Language / Язык","disclaimer":"This is an informational student project. Check current rules and deadlines with official TIU sources before acting.","not_confirmed":"Needs verification before publication","foreign_note":"",
-"navigation":"Campus & services","eyebrow":"Tyumen Industrial University","you_are":"You are here","topic":"Topic","all_topics":"All topics","found":"Found","of":"of","show_more":"Show more","unconfirmed_box":"This card is not officially confirmed. Check contacts, deadlines and documents with the relevant TIU office before you act.","to_clarify":"To be confirmed","same_topic":"More questions on this topic","quick":"Quick access","kb_count":"questions in the knowledge base","show_all_results":"Show all results","kb_ru_note":"The knowledge base answers are written in Russian. You can search in English.","kb_hint":"Select a question to open the full answer."}
+"tagline":"Everything TIU students need — in one place.","home":"Home","search":"Search","search_ph":"Enter a question, topic or keyword...","sections":"Explore sections","docs":"Documents","study":"Studies","dorm":"Accommodation","scholarship":"Scholarships","sos":"What should I do if…","clubs":"Student life","events":"Events & opportunities","map":"Campus map","international":"International students","all":"All questions","popular":"Popular questions","back":"← Home","back_list":"← Back to questions","no_results":"No results. Try a different search or topic.","answer":"What to do","department":"Contact","address":"Address","office":"Office","phone":"Phone","email":"Email","documents":"What to prepare","deadline":"Timeframe","source":"Official source","checked":"Data status","map_title":"TIU campus map","map_hint":"Search for a building by number or address. Geocoded locations may need manual verification.","map_search":"Find a building","route":"Directions ↗","campus_list":"Campus buildings","foreign_title":"For international students","foreign_sub":"One guide in Russian and English.","faq":"FAQ","all_search":"Search the full knowledge base","home_title":"Your university. Made clearer.","home_desc":"One clear route to TIU information, services and campus buildings.","open":"Open","language":"Language / Язык","disclaimer":"This is an informational student project. Check current rules and deadlines with official TIU sources before acting.","not_confirmed":"","foreign_note":"",
+"navigation":"Campus & services","eyebrow":"Tyumen Industrial University","you_are":"You are here","topic":"Topic","all_topics":"All topics","found":"Found","of":"of","show_more":"Show more","unconfirmed_box":"","to_clarify":"","same_topic":"More questions on this topic","quick":"Quick access","kb_count":"questions in the knowledge base","show_all_results":"Show all results","kb_ru_note":"The knowledge base answers are written in Russian. You can search in English.","kb_hint":"Select a question to open the full answer."}
 }
 
 lang = st.sidebar.selectbox("🌐 Language / Язык", ["Русский", "English"], key="lang_sel")
@@ -769,7 +769,7 @@ button[kind="primary"],button[data-testid="stBaseButton-primary"]{border-color:v
 [data-testid="stTextInput"] input{background:#0d1b35!important;border:1px solid #3a5684!important;border-radius:12px!important;color:#fff!important;min-height:46px}
 [data-testid="stSelectbox"] div{border-radius:10px}
 [data-testid="stExpander"]{border:1px solid var(--line)!important;border-radius:14px!important;background:#0f1d38}
-.leaflet-control-attribution{display:none!important}
+.leaflet-control-attribution,.leaflet-bottom.leaflet-right{display:none!important;opacity:0!important;visibility:hidden!important}
 hr{border-color:#263d66}
 footer{visibility:hidden}
 @media(max-width:700px){.block-container{padding:1rem .9rem 2.5rem}.hero{padding:22px 18px}.contact{grid-template-columns:1fr;gap:2px}.contact dd{margin-bottom:8px}}
@@ -823,21 +823,24 @@ def render_answer(answer):
 def render_contact_block(item):
     rows = []
     def row(label, value, extra=""):
-        if kb.is_placeholder(value):
-            rows.append(f'<dt>{esc(label)}</dt><dd class="todo">{esc(T["to_clarify"])}</dd>')
-        else:
-            cls = ' class="todo"' if kb.is_unconfirmed(value) and extra == "check" else ""
-            rows.append(f'<dt>{esc(label)}</dt><dd{cls}>{value}</dd>')
+        raw = str(value or "").strip()
+        if not raw or kb.is_placeholder(raw) or "уточняется" in raw.lower():
+            return
+        rows.append(f'<dt>{esc(label)}</dt><dd>{value}</dd>')
     row(T["department"], esc(item.get("department")))
     row(T["address"], esc(item.get("address")))
     row(T["office"], esc(item.get("office")))
-    phone = item.get("phone", "")
-    href = kb.phone_href(phone)
-    row(T["phone"], f'<a href="{href}">{esc(phone)}</a>' if href and not kb.is_placeholder(phone) else esc(phone))
-    email = item.get("email", "")
-    row(T["email"], f'<a href="mailto:{esc(email)}">{esc(email)}</a>' if "@" in email else esc(email))
+    phone = str(item.get("phone") or "").strip()
+    if phone and not kb.is_placeholder(phone) and "уточняется" not in phone.lower():
+        href = kb.phone_href(phone)
+        row(T["phone"], f'<a href="{href}">{esc(phone)}</a>' if href else esc(phone))
+    email = str(item.get("email") or "").strip()
+    if email and not kb.is_placeholder(email) and "уточняется" not in email.lower():
+        row(T["email"], f'<a href="mailto:{esc(email)}">{esc(email)}</a>' if "@" in email else esc(email))
     row(T["documents"], esc(item.get("documents")), "check")
     row(T["deadline"], esc(item.get("deadline")), "check")
+    if not rows:
+        return ""
     return '<dl class="contact">' + "".join(rows) + '</dl>'
 
 
@@ -852,12 +855,13 @@ def render_detail(item):
         st.rerun()
     kind, status_text = kb.status_of(item)
     topic = kb.topic_of(item)
-    st.markdown(f'<span class="badge">{esc(kb.topic_label(topic, lang, CATEGORY_LABELS))}</span><span class="badge {kind}">{"✓" if kind=="ok" else "⚠"} {esc(status_text)}</span>', unsafe_allow_html=True)
+    status_badge = f'<span class="badge ok">✓ {esc(status_text)}</span>' if kind == "ok" else ""
+    st.markdown(f'<span class="badge">{esc(kb.topic_label(topic, lang, CATEGORY_LABELS))}</span>{status_badge}', unsafe_allow_html=True)
     st.markdown("## " + item["question"])
     st.markdown(render_answer(item["answer"]), unsafe_allow_html=True)
-    if kind == "warn" or any(kb.is_unconfirmed(item.get(k)) for k in ("deadline",)):
-        st.markdown(f'<div class="box warn">⚠ {esc(T["unconfirmed_box"])}</div>', unsafe_allow_html=True)
-    st.markdown(render_contact_block(item), unsafe_allow_html=True)
+    contact_html = render_contact_block(item)
+    if contact_html:
+        st.markdown(contact_html, unsafe_allow_html=True)
     url = safe_url(item.get("officialSource"))
     if url:
         st.markdown(f"**{T['source']}:** [{url}]({url})")
@@ -893,9 +897,10 @@ def render_kb_list(items, key, title):
         st.info(T["no_results"]); return
     for item in subset[:limit]:
         kind, status_text = kb.status_of(item)
+        status_badge = f'<span class="badge ok">✓ {esc(status_text)}</span>' if kind == "ok" else ""
         with st.container(border=True):
             st.markdown("**" + item["question"] + "**")
-            st.markdown(f'<span class="badge">{esc(kb.topic_label(kb.topic_of(item), lang, CATEGORY_LABELS))}</span><span class="badge {kind}">{"✓" if kind=="ok" else "⚠"} {esc(status_text)}</span>', unsafe_allow_html=True)
+            st.markdown(f'<span class="badge">{esc(kb.topic_label(kb.topic_of(item), lang, CATEGORY_LABELS))}</span>{status_badge}', unsafe_allow_html=True)
             if st.button(T["open"]+" →", key=f"open_{key}_{item['id']}"):
                 open_card(item["id"]); st.rerun()
     if len(subset) > limit:
@@ -945,7 +950,9 @@ elif page=="map":
     st.caption(T["map_hint"])
     search=st.text_input(T["map_search"],placeholder="Building 7 / Мельникайте, 70",key="campus_search")
     visible=[x for x in CAMPUS_LOCATIONS if not search.strip() or search.casefold() in x['name'].casefold() or search.casefold() in x['address'].casefold()]
-    m=folium.Map(location=[57.1522,65.5272],zoom_start=12,tiles="OpenStreetMap",attr=" ",control_scale=True)
+    m=folium.Map(location=[57.1522,65.5272],zoom_start=12,tiles=None,control_scale=True,attributionControl=False)
+    folium.TileLayer("OpenStreetMap",attr=" ",control=False).add_to(m)
+    m.get_root().header.add_child(folium.Element("<style>.leaflet-control-attribution,.leaflet-bottom.leaflet-right{display:none!important;}</style>"))
     try:
         with st.spinner("Resolving campus addresses…" if lang=="English" else "Определяем координаты корпусов…"):
             geocoded=geocode_campuses()
