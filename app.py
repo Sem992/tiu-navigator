@@ -746,19 +746,29 @@ st.markdown("""
 .card{background:linear-gradient(145deg,#142747,#0f1d38);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin:8px 0 6px}
 .card b{font-size:1.08rem}
 .smallmuted{color:var(--muted);font-size:.92rem;margin-top:2px}
-.answer{background:#122342;border-left:4px solid var(--cyan);border-radius:12px;padding:16px 20px;margin:12px 0;line-height:1.65}
-.answer .step{display:flex;gap:12px;margin:9px 0}
-.answer .num{flex:0 0 28px;height:28px;border-radius:50%;background:#1b4772;color:#fff;font-weight:700;text-align:center;line-height:28px;font-size:.88rem}
-.answer p{margin:8px 0}.answer .h{font-weight:700;margin:14px 0 4px}
+.answer{background:#122342;border-left:3px solid var(--cyan);border-radius:12px;padding:16px 22px;margin:14px 0;line-height:1.7;font-size:1rem;overflow-wrap:anywhere}
+.answer>b{display:block;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--cyan);margin-bottom:6px}
+.answer .step{display:flex;gap:14px;margin:12px 0;align-items:flex-start}
+.answer .step>div:last-child{flex:1;min-width:0}
+.answer .num{flex:0 0 26px;height:26px;border-radius:50%;background:#1b4772;color:#fff;font-weight:700;text-align:center;line-height:26px;font-size:.82rem;margin-top:2px}
+.answer p{margin:10px 0}.answer .h{font-weight:700;margin:16px 0 4px}
+.qtitle{font-size:clamp(1.3rem,4.4vw,1.75rem)!important;line-height:1.3!important;font-weight:750!important;margin:.5rem 0 .2rem!important;padding:0!important;overflow-wrap:anywhere}
+.qlist{font-weight:650;font-size:1.02rem;line-height:1.4;margin-bottom:6px;overflow-wrap:anywhere}
 .badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.78rem;font-weight:650;margin:2px 6px 2px 0;border:1px solid var(--line);color:var(--muted)}
 .badge.ok{color:var(--ok);border-color:#2d6b4d}.badge.warn{color:var(--warn);border-color:#7a6230}
 .box{border-radius:12px;padding:13px 16px;margin:12px 0;line-height:1.55;border:1px solid}
 .box.warn{background:#2a2412;border-color:#7a6230;color:#ffe9b3}
 .box.info{background:#10294a;border-color:#2d5a8e;color:#d6e6ff}
-.contact{display:grid;grid-template-columns:150px 1fr;gap:6px 14px;background:#0f1d38;border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin:12px 0}
-.contact dt{color:var(--muted);font-size:.9rem}.contact dd{margin:0;word-break:break-word}
+.contact{display:grid;grid-template-columns:150px minmax(0,1fr);gap:0 18px;background:#0f1d38;border:1px solid var(--line);border-radius:14px;padding:6px 20px;margin:14px 0}
+.contact dt,.contact dd{padding:10px 0;border-top:1px solid #1f3257}
+.contact dt:first-of-type,.contact dt:first-of-type+dd{border-top:0}
+.contact dt{color:var(--muted);font-size:.88rem}.contact dd{margin:0;overflow-wrap:anywhere;line-height:1.5}
+.contact a.src{display:block;margin:0 0 4px}
 .contact dd.todo{color:var(--warn)}
-.contact a,.answer a{color:var(--cyan)}
+.contact a,.answer a{color:var(--cyan);text-decoration:none}
+.contact a:hover,.answer a:hover{text-decoration:underline}
+[data-testid="stVerticalBlockBorderWrapper"]{border-color:var(--line)!important;border-radius:14px!important;transition:border-color .15s}
+[data-testid="stVerticalBlockBorderWrapper"]:hover{border-color:#3b6aa5!important}
 .sos{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0}
 .sos div{background:#0f1d38;border:1px solid var(--line);border-radius:12px;padding:8px 14px}
 .sos b{color:var(--cyan);font-size:1.25rem;margin-right:8px}
@@ -772,7 +782,7 @@ button[kind="primary"],button[data-testid="stBaseButton-primary"]{border-color:v
 .leaflet-control-attribution,.leaflet-bottom.leaflet-right{display:none!important;opacity:0!important;visibility:hidden!important}
 hr{border-color:#263d66}
 footer{visibility:hidden}
-@media(max-width:700px){.block-container{padding:1rem .9rem 2.5rem}.hero{padding:22px 18px}.contact{grid-template-columns:1fr;gap:2px}.contact dd{margin-bottom:8px}}
+@media(max-width:700px){.block-container{padding:1rem .9rem 2.5rem}.hero{padding:22px 18px}.answer{padding:14px 16px}.contact{grid-template-columns:1fr;padding:6px 16px}.contact dt{border-top:1px solid #1f3257;padding:10px 0 0}.contact dd{border-top:0;padding:2px 0 10px}.contact dt:first-of-type{border-top:0}}
 </style>
 """, unsafe_allow_html=True)
 
@@ -810,7 +820,7 @@ def persisted_text(label, key, placeholder):
 
 def render_answer(answer):
     parts = []
-    for block in kb.split_answer(answer):
+    for block in kb.split_answer(kb.clean_answer(answer)):
         if block[0] == "step":
             parts.append(f'<div class="step"><div class="num">{esc(block[1])}</div><div>{esc(block[2])}</div></div>')
         elif block[0] == "h":
@@ -821,24 +831,33 @@ def render_answer(answer):
 
 
 def render_contact_block(item):
+    """Контакты карточки. Показываются только заполненные поля: пустые, заглушки и пометки
+    вроде «уточняется» / «не подтверждено» отбрасывает kb.clean_field, строка не выводится."""
     rows = []
-    def row(label, value, extra=""):
-        raw = str(value or "").strip()
-        if not raw or kb.is_placeholder(raw) or "уточняется" in raw.lower():
-            return
-        rows.append(f'<dt>{esc(label)}</dt><dd>{value}</dd>')
-    row(T["department"], esc(item.get("department")))
-    row(T["address"], esc(item.get("address")))
-    row(T["office"], esc(item.get("office")))
-    phone = str(item.get("phone") or "").strip()
-    if phone and not kb.is_placeholder(phone) and "уточняется" not in phone.lower():
+
+    def row(label, value_html):
+        if value_html:
+            rows.append(f'<dt>{esc(label)}</dt><dd>{value_html}</dd>')
+
+    def text(key):
+        return kb.clean_field(item.get(key))
+
+    row(T["department"], esc(text("department")))
+    row(T["address"], esc(text("address")))
+    row(T["office"], esc(text("office")))
+    phone = text("phone")
+    if phone:
         href = kb.phone_href(phone)
         row(T["phone"], f'<a href="{href}">{esc(phone)}</a>' if href else esc(phone))
-    email = str(item.get("email") or "").strip()
-    if email and not kb.is_placeholder(email) and "уточняется" not in email.lower():
+    email = text("email")
+    if email:
         row(T["email"], f'<a href="mailto:{esc(email)}">{esc(email)}</a>' if "@" in email else esc(email))
-    row(T["documents"], esc(item.get("documents")), "check")
-    row(T["deadline"], esc(item.get("deadline")), "check")
+    row(T["documents"], esc(text("documents")))
+    row(T["deadline"], esc(text("deadline")))
+    links = "".join(
+        f'<a class="src" href="{esc(u)}" target="_blank" rel="noopener noreferrer">{esc(kb.short_url(u))} ↗</a>'
+        for u in kb.split_sources(item.get("officialSource")))
+    row(T["source"], links)
     if not rows:
         return ""
     return '<dl class="contact">' + "".join(rows) + '</dl>'
@@ -857,14 +876,11 @@ def render_detail(item):
     topic = kb.topic_of(item)
     status_badge = f'<span class="badge ok">✓ {esc(status_text)}</span>' if kind == "ok" else ""
     st.markdown(f'<span class="badge">{esc(kb.topic_label(topic, lang, CATEGORY_LABELS))}</span>{status_badge}', unsafe_allow_html=True)
-    st.markdown("## " + item["question"])
+    st.markdown(f'<h2 class="qtitle">{esc(item["question"])}</h2>', unsafe_allow_html=True)
     st.markdown(render_answer(item["answer"]), unsafe_allow_html=True)
     contact_html = render_contact_block(item)
     if contact_html:
         st.markdown(contact_html, unsafe_allow_html=True)
-    url = safe_url(item.get("officialSource"))
-    if url:
-        st.markdown(f"**{T['source']}:** [{url}]({url})")
     related = [x for x in ALL_QUESTIONS if kb.topic_of(x) == topic and x["id"] != item["id"]][:3]
     if related:
         st.markdown(f"##### {T['same_topic']}")
@@ -899,7 +915,7 @@ def render_kb_list(items, key, title):
         kind, status_text = kb.status_of(item)
         status_badge = f'<span class="badge ok">✓ {esc(status_text)}</span>' if kind == "ok" else ""
         with st.container(border=True):
-            st.markdown("**" + item["question"] + "**")
+            st.markdown(f'<div class="qlist">{esc(item["question"])}</div>', unsafe_allow_html=True)
             st.markdown(f'<span class="badge">{esc(kb.topic_label(kb.topic_of(item), lang, CATEGORY_LABELS))}</span>{status_badge}', unsafe_allow_html=True)
             if st.button(T["open"]+" →", key=f"open_{key}_{item['id']}"):
                 open_card(item["id"]); st.rerun()

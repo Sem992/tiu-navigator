@@ -8,6 +8,8 @@ from pathlib import Path
 
 DATA_DIR = Path(__file__).resolve().parent / "data"
 NEW_KB_FILE = DATA_DIR / "knowledge_base_new.json"
+NEW_KB_FILE_2 = DATA_DIR / "knowledge_base_257.json"
+NEW_KB_FILES = (NEW_KB_FILE, NEW_KB_FILE_2)
 
 PLACEHOLDER = "Информация уточняется"
 FIELD_KEYS = ("department", "address", "office", "phone", "email", "documents", "deadline")
@@ -25,6 +27,20 @@ TOPIC_LABELS = {
     "safety": {"ru": "Безопасность и поддержка", "en": "Safety & support"},
     "rights": {"ru": "Права, студсовет, инициативы", "en": "Rights & student council"},
     "campus": {"ru": "Кампус и инфраструктура", "en": "Campus & facilities"},
+    # Блок «Что делать, если…» (раздел sos)
+    "s_study": {"ru": "Учёба и оценки", "en": "Studies & grades"},
+    "s_digital": {"ru": "Цифровые сервисы", "en": "Digital services"},
+    "s_docs": {"ru": "Документы и заявления", "en": "Documents & applications"},
+    "s_finance": {"ru": "Оплата и финансы", "en": "Payments & finance"},
+    "s_dorm": {"ru": "Общежитие и быт", "en": "Dormitory & daily life"},
+    "s_campus": {"ru": "Кампус, здоровье и безопасность", "en": "Campus, health & safety"},
+    "s_opps": {"ru": "Студенческие возможности", "en": "Student opportunities"},
+    # Остальные новые карточки
+    "skills": {"ru": "Учёба и организация времени", "en": "Study skills & time management"},
+    "clubs_life": {"ru": "Клубы и творчество", "en": "Clubs & creativity"},
+    "health": {"ru": "Здоровье и баланс", "en": "Health & balance"},
+    "city": {"ru": "Тюмень и жизнь вне университета", "en": "Tyumen & life off campus"},
+    "digital": {"ru": "Техника и цифровые инструменты", "en": "Tech & digital tools"},
 }
 
 # Английские слова -> корни русских слов, чтобы поиск работал на английском
@@ -116,11 +132,21 @@ def topic_label(topic: str, lang: str, category_labels: dict) -> str:
     return category_labels.get(topic, topic)
 
 
-def load_new_questions(path: Path = NEW_KB_FILE) -> list:
+def _load_json(path: Path) -> list:
     if not path.exists():
         return []
     with open(path, encoding="utf-8") as fh:
         return json.load(fh)
+
+
+def load_new_questions(path: Path = None) -> list:
+    """Без аргумента — все файлы с новыми карточками (NEW_KB_FILES); с path — один файл."""
+    if path is not None:
+        return _load_json(Path(path))
+    items = []
+    for file in NEW_KB_FILES:
+        items.extend(_load_json(file))
+    return items
 
 
 def merge_questions(old: list, new: list) -> list:
@@ -180,6 +206,108 @@ def search(items: list, query: str) -> list:
 def is_placeholder(value) -> bool:
     v = _fold(value).strip()
     return (not v) or v in ("информация уточняется", "уточняется")
+
+
+# Заглушки и пояснения «данных нет / не проверено» в полях карточки.
+# Они не должны попадать на сайт: такие фрагменты вырезаются, а если ничего не осталось,
+# поле скрывается целиком. «Паспорт для подтверждения личности» сюда не попадает.
+_GAP = re.compile(
+    r"уточн|не\s?подтвержд|не\s?опубликов|не\s?проверен|требует\s+(?:проверк|уточн)|"
+    r"нет\s+данных|не\s+указан|неизвестн|не\s+найден|информация\s+(?:не|отсутств)|"
+    r"зависит\s+от\s+корпуса|точн\w+\s+(?:перечень|срок|подразделение|адрес)|профильный\s+вопрос",
+    re.I)
+_SPLIT = re.compile(r"(;\s*|(?<=[.!?])\s+|\s+[—–]\s+)")
+
+
+def clean_field(value) -> str:
+    """Возвращает значение поля без заглушек; пустая строка — поле показывать не нужно."""
+    v = re.sub(r"\s+", " ", str(value or "")).strip()
+    if not v:
+        return ""
+    # скобки с пометками вида «(уточнить через ...)» убираем целиком
+    v = re.sub(r"\s*\([^()]*(?:%s)[^()]*\)" % _GAP.pattern, "", v, flags=re.I).strip()
+    parts = _SPLIT.split(v)
+    segs = parts[0::2]
+    seps = parts[1::2] + [""]
+    kept = [(seg, sep) for seg, sep in zip(segs, seps) if seg.strip() and not _GAP.search(seg)]
+    if not kept:
+        return ""
+    out = "".join(seg + (sep if i < len(kept) - 1 else "") for i, (seg, sep) in enumerate(kept))
+    out = out.strip(" ;,—–-")
+    return "" if is_placeholder(out) else out
+
+
+# Фразы-констатации «информации нет / не удалось подтвердить» в тексте ответа.
+# Условные подсказки («Если не нашли — позвоните…») и советы «уточните у…» остаются.
+_ANSWER_GAP = re.compile(
+    r"не\s?(?:найден|найдена|найдено|найдены|нашл[аио]с?ь?|нашё?л|нашли)\b|найти\s+не\s+удалось|"
+    r"не\s+удалось\s+(?:найти|открыть|подтвердить)|подтвердить\s+не\s+удалось|"
+    r"не\s?подтвержд|не\s?проверял|не\s+указан[аоы]?\b|не\s+опубликован|"
+    r"нет\s+данных|неизвестн|нет\s+подтвержд|актуальность\s+не|нет\s+в\s+проверенн|не\s+описан\w*",
+    re.I)
+# Строка-констатация «Порядок … нужно уточнить в дирекции» — это не шаг, а пометка об отсутствии данных.
+_ANSWER_TODO = re.compile(
+    r"^(?:порядок|правила|сроки|условия|перечень)[^.!?]*\b(?:нужно|необходимо|следует)\s+уточнить",
+    re.I)
+_ASPLIT = re.compile(r"(;\s*|(?<=[.!?])\s+|\s*[:—–]\s+)")
+
+
+def _capitalize(text: str) -> str:
+    return text[:1].upper() + text[1:] if text else text
+
+
+def clean_answer(answer) -> str:
+    """Убирает из ответа фразы вида «… не найдено / не удалось подтвердить», оставляя действия.
+    Строки с «Если …» (условные шаги) не затрагиваются. Нумерация шагов пересобирается."""
+    lines = []
+    for raw in str(answer or "").splitlines():
+        line = raw.rstrip()
+        if not line.strip():
+            lines.append("")
+            continue
+        m = re.match(r"^(\s*(?:\d+[.)]|[•\-–])\s+)(.*)$", line)
+        prefix, body = (m.group(1), m.group(2)) if m else ("", line.strip())
+        if _ANSWER_TODO.match(body):
+            continue
+        if re.match(r"^(?:если|при\s)", body, re.I) or not _ANSWER_GAP.search(body):
+            lines.append(prefix + body)
+            continue
+        parts = _ASPLIT.split(body)
+        segs, seps = parts[0::2], parts[1::2] + [""]
+        kept = [(a, b) for a, b in zip(segs, seps) if a.strip() and not _ANSWER_GAP.search(a)]
+        if not kept:
+            continue
+        out = "".join(a + (b if i < len(kept) - 1 else "") for i, (a, b) in enumerate(kept)).strip(" ;,:—–")
+        # от строки остался только обрывок вроде «Позвони и уточни» — без смысла, убираем
+        if re.match(r"^(?:уточн\w*|позвон\w*)\b", out, re.I) and len(out.split()) <= 5:
+            continue
+        if out and out[-1] not in ".!?»)":
+            out += "."
+        lines.append(prefix + _capitalize(out))
+    # пересборка нумерации
+    result, n = [], 0
+    for line in lines:
+        m = re.match(r"^(\d+)([.)])\s+(.*)$", line)
+        if m:
+            n += 1
+            line = f"{n}{m.group(2)} {m.group(3)}"
+        result.append(line)
+    return "\n".join(result).strip()
+
+
+def split_sources(value) -> list:
+    """Список ссылок из поля officialSource (несколько ссылок — через перенос строки/пробел)."""
+    urls = []
+    for tok in re.split(r"[\s,]+", str(value or "")):
+        if tok.startswith(("http://", "https://")) and tok not in urls:
+            urls.append(tok)
+    return urls
+
+
+def short_url(url: str, limit: int = 46) -> str:
+    """Читаемая подпись ссылки: без схемы, www и завершающего слэша."""
+    text = re.sub(r"^https?://(www\.)?", "", url).rstrip("/")
+    return text if len(text) <= limit else text[: limit - 1] + "…"
 
 
 def is_unconfirmed(value) -> bool:
